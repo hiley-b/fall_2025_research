@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VR Network Analysis</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/recharts@2.5.0/dist/Recharts.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <div id="root"></div>
+    
+    <script type="text/babel">
+        const { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } = Recharts;
+        const { useState } = React;
+
+        const categoryAData = [
+          { interval: 0, packets: 19, errors: 0, filtered: 0 },
+          { interval: 1, packets: 16, errors: 0, filtered: 0 },
+          { interval: 2, packets: 20, errors: 0, filtered: 0 },
+          { interval: 3, packets: 20, errors: 0, filtered: 0 },
+          { interval: 4, packets: 19, errors: 0, filtered: 0 },
+          { interval: 5, packets: 11, errors: 0, filtered: 0 },
+          { interval: 6, packets: 25, errors: 0, filtered: 0 },
+          { interval: 7, packets: 46, errors: 0, filtered: 0 },
+          { interval: 8, packets: 14, errors: 0, filtered: 0 },
+          { interval: 9, packets: 27, errors: 0, filtered: 0 },
+          { interval: 10, packets: 15, errors: 0, filtered: 0 },
+          { interval: 11, packets: 21, errors: 0, filtered: 0 },
+          { interval: 12, packets: 15, errors: 0, filtered: 0 },
+          { interval: 13, packets: 14, errors: 0, filtered: 0 },
+          { interval: 14, packets: 13, errors: 0, filtered: 0 },
+          { interval: 15, packets: 16, errors: 0, filtered: 0 },
+          { interval: 16, packets: 12, errors: 0, filtered: 0 },
+          { interval: 17, packets: 11, errors: 0, filtered: 0 },
+          { interval: 18, packets: 15, errors: 6, filtered: 0 },
+          { interval: 19, packets: 26, errors: 0, filtered: 0 },
+          { interval: 20, packets: 17, errors: 0, filtered: 0 },
+          { interval: 21, packets: 21, errors: 0, filtered: 0 },
+          { interval: 22, packets: 67, errors: 0, filtered: 0 },
+          { interval: 23, packets: 12, errors: 0, filtered: 0 },
+          { interval: 24, packets: 16, errors: 0, filtered: 0 },
+          { interval: 25, packets: 20, errors: 0, filtered: 0 },
+          { interval: 26, packets: 26, errors: 0, filtered: 0 },
+          { interval: 27, packets: 10, errors: 0, filtered: 0 },
+          { interval: 28, packets: 11, errors: 0, filtered: 0 },
+          { interval: 29, packets: 32, errors: 0, filtered: 0 },
+          { interval: 30, packets: 22, errors: 0, filtered: 0 },
+          { interval: 31, packets: 65, errors: 0, filtered: 31 },
+          { interval: 32, packets: 167, errors: 0, filtered: 154 },
+          { interval: 33, packets: 166, errors: 4, filtered: 139 },
+          { interval: 34, packets: 150, errors: 2, filtered: 137 },
+          { interval: 35, packets: 155, errors: 0, filtered: 139 },
+          { interval: 36, packets: 200, errors: 0, filtered: 140 },
+          { interval: 37, packets: 168, errors: 2, filtered: 140 },
+          { interval: 38, packets: 153, errors: 0, filtered: 139 },
+          { interval: 39, packets: 165, errors: 0, filtered: 137 },
+          { interval: 40, packets: 187, errors: 0, filtered: 139 },
+          { interval: 41, packets: 156, errors: 0, filtered: 139 },
+          { interval: 42, packets: 167, errors: 0, filtered: 140 },
+          { interval: 43, packets: 198, errors: 0, filtered: 139 },
+          { interval: 44, packets: 156, errors: 0, filtered: 139 },
+          { interval: 45, packets: 147, errors: 0, filtered: 138 },
+          { interval: 46, packets: 167, errors: 0, filtered: 139 },
+          { interval: 47, packets: 178, errors: 0, filtered: 139 },
+          { interval: 48, packets: 156, errors: 4, filtered: 138 },
+          { interval: 49, packets: 168, errors: 0, filtered: 140 },
+          { interval: 50, packets: 155, errors: 0, filtered: 139 },
+          { interval: 51, packets: 370, errors: 0, filtered: 139 },
+          { interval: 52, packets: 166, errors: 2, filtered: 124 },
+          { interval: 53, packets: 179, errors: 2, filtered: 152 },
+          { interval: 54, packets: 155, errors: 0, filtered: 140 },
+          { interval: 55, packets: 238, errors: 2, filtered: 139 },
+          { interval: 56, packets: 192, errors: 0, filtered: 139 },
+          { interval: 57, packets: 182, errors: 2, filtered: 139 },
+          { interval: 58, packets: 173, errors: 0, filtered: 139 },
+          { interval: 59, packets: 181, errors: 0, filtered: 139 },
+          { interval: 60, packets: 148, errors: 0, filtered: 124 },
+          { interval: 61, packets: 127, errors: 0, filtered: 98 },
+          { interval: 62, packets: 13, errors: 0, filtered: 0 },
+          { interval: 63, packets: 40, errors: 4, filtered: 0 },
+          { interval: 64, packets: 18, errors: 0, filtered: 0 },
+          { interval: 65, packets: 55, errors: 0, filtered: 0 },
+          { interval: 66, packets: 52, errors: 2, filtered: 0 },
+          { interval: 67, packets: 37, errors: 2, filtered: 0 },
+          { interval: 68, packets: 26, errors: 0, filtered: 0 },
+          { interval: 69, packets: 34, errors: 2, filtered: 0 },
+          { interval: 70, packets: 47, errors: 0, filtered: 0 },
+          { interval: 71, packets: 26, errors: 0, filtered: 0 },
+          { interval: 72, packets: 22, errors: 0, filtered: 0 },
+          { interval: 73, packets: 32, errors: 0, filtered: 0 },
+          { interval: 74, packets: 19, errors: 0, filtered: 0 },
+          { interval: 75, packets: 20, errors: 0, filtered: 0 },
+          { interval: 76, packets: 21, errors: 0, filtered: 0 },
+          { interval: 77, packets: 28, errors: 0, filtered: 0 },
+          { interval: 78, packets: 22, errors: 4, filtered: 0 },
+          { interval: 79, packets: 29, errors: 2, filtered: 0 },
+          { interval: 80, packets: 23, errors: 0, filtered: 0 },
+          { interval: 81, packets: 26, errors: 1, filtered: 0 },
+          { interval: 82, packets: 32, errors: 3, filtered: 0 },
+          { interval: 83, packets: 34, errors: 0, filtered: 0 },
+          { interval: 84, packets: 23, errors: 0, filtered: 0 },
+          { interval: 85, packets: 20, errors: 0, filtered: 0 },
+          { interval: 86, packets: 46, errors: 2, filtered: 0 },
+          { interval: 87, packets: 72, errors: 0, filtered: 0 },
+          { interval: 88, packets: 11, errors: 0, filtered: 0 },
+          { interval: 89, packets: 35, errors: 2, filtered: 0 },
+          { interval: 90, packets: 22, errors: 0, filtered: 0 },
+          { interval: 91, packets: 14, errors: 0, filtered: 0 },
+          { interval: 92, packets: 30, errors: 0, filtered: 0 },
+          { interval: 93, packets: 16, errors: 4, filtered: 0 },
+          { interval: 94, packets: 14, errors: 0, filtered: 0 },
+          { interval: 95, packets: 11, errors: 0, filtered: 0 },
+          { interval: 96, packets: 24, errors: 2, filtered: 0 },
+          { interval: 97, packets: 34, errors: 2, filtered: 0 },
+          { interval: 98, packets: 21, errors: 0, filtered: 0 },
+          { interval: 99, packets: 24, errors: 0, filtered: 0 },
+          { interval: 100, packets: 31, errors: 0, filtered: 0 },
+          { interval: 101, packets: 12, errors: 0, filtered: 0 },
+          { interval: 102, packets: 39, errors: 0, filtered: 0 },
+          { interval: 103, packets: 16, errors: 0, filtered: 0 },
+          { interval: 104, packets: 9, errors: 0, filtered: 0 }
+        ];
+
+        const categoryBData = [
+          { interval: 0, packets: 57, errors: 0, filtered: 33 },
+          { interval: 1, packets: 48, errors: 0, filtered: 30 },
+          { interval: 2, packets: 54, errors: 0, filtered: 30 },
+          { interval: 3, packets: 88, errors: 2, filtered: 30 },
+          { interval: 4, packets: 60, errors: 0, filtered: 30 },
+          { interval: 5, packets: 47, errors: 0, filtered: 27 },
+          { interval: 6, packets: 76, errors: 0, filtered: 33 },
+          { interval: 7, packets: 56, errors: 0, filtered: 30 },
+          { interval: 8, packets: 41, errors: 0, filtered: 27 },
+          { interval: 9, packets: 45, errors: 0, filtered: 33 },
+          { interval: 10, packets: 46, errors: 0, filtered: 30 },
+          { interval: 11, packets: 42, errors: 0, filtered: 27 },
+          { interval: 12, packets: 46, errors: 0, filtered: 30 },
+          { interval: 13, packets: 49, errors: 0, filtered: 33 },
+          { interval: 14, packets: 59, errors: 0, filtered: 30 },
+          { interval: 15, packets: 42, errors: 0, filtered: 27 },
+          { interval: 16, packets: 52, errors: 0, filtered: 33 },
+          { interval: 17, packets: 52, errors: 0, filtered: 30 },
+          { interval: 18, packets: 54, errors: 4, filtered: 30 },
+          { interval: 19, packets: 45, errors: 0, filtered: 30 },
+          { interval: 20, packets: 92, errors: 3, filtered: 30 },
+          { interval: 21, packets: 44, errors: 0, filtered: 30 },
+          { interval: 22, packets: 50, errors: 2, filtered: 30 },
+          { interval: 23, packets: 52, errors: 0, filtered: 30 },
+          { interval: 24, packets: 58, errors: 0, filtered: 30 },
+          { interval: 25, packets: 40, errors: 2, filtered: 6 },
+          { interval: 26, packets: 16, errors: 0, filtered: 0 },
+          { interval: 27, packets: 18, errors: 0, filtered: 0 },
+          { interval: 28, packets: 26, errors: 0, filtered: 0 },
+          { interval: 29, packets: 14, errors: 0, filtered: 0 },
+          { interval: 30, packets: 193, errors: 0, filtered: 0 },
+          { interval: 31, packets: 67, errors: 0, filtered: 0 },
+          { interval: 32, packets: 12, errors: 0, filtered: 0 },
+          { interval: 33, packets: 15, errors: 4, filtered: 0 },
+          { interval: 34, packets: 52, errors: 0, filtered: 0 },
+          { interval: 35, packets: 1, errors: 0, filtered: 0 }
+        ];
+
+        const VRNetworkViz = () => {
+          const [view, setView] = useState('traffic');
+
+          const calcStats = (data) => {
+            const packets = data.map(d => d.packets);
+            const errors = data.map(d => d.errors);
+            const avgPackets = packets.reduce((a, b) => a + b, 0) / packets.length;
+            const maxPackets = Math.max(...packets);
+            const totalErrors = errors.reduce((a, b) => a + b, 0);
+            return { avgPackets: avgPackets.toFixed(1), maxPackets, totalErrors };
+          };
+
+          const statsA = calcStats(categoryAData);
+          const statsB = calcStats(categoryBData);
+
+          const combinedData = categoryAData.map((item, idx) => ({
+            interval: item.interval,
+            highMotion: item.packets,
+            stationary: categoryBData[idx]?.packets || null
+          }));
+
+          const comparisonData = [
+            { metric: 'Avg Packets/Interval', highMotion: parseFloat(statsA.avgPackets), stationary: parseFloat(statsB.avgPackets) },
+            { metric: 'Peak Traffic', highMotion: statsA.maxPackets, stationary: statsB.maxPackets },
+            { metric: 'Total TCP Errors', highMotion: statsA.totalErrors, stationary: statsB.totalErrors }
+          ];
+
+          return (
+            <div className="w-full h-screen flex flex-col items-center justify-center bg-white p-8">
+              <div className="w-full max-w-5xl">
+                <div className="flex gap-2 mb-6 justify-center">
+                  <button
+                    onClick={() => setView('traffic')}
+                    className={`px-5 py-2 rounded-lg text-sm font-medium transition-all ${
+                      view === 'traffic' 
+                        ? 'bg-pink-400 text-white shadow-lg' 
+                        : 'bg-gray-100 text-gray-600 hover:bg-pink-50'
+                    }`}
+                  >
+                    Traffic Patterns
+                  </button>
+                  <button
+                    onClick={() => setView('comparison')}
+                    className={`px-5 py-2 rounded-lg text-sm font-medium transition-all ${
+                      view === 'comparison' 
+                        ? 'bg-pink-400 text-white shadow-lg' 
+                        : 'bg-gray-100 text-gray-600 hover:bg-pink-50'
+                    }`}
+                  >
+                    Metrics Comparison
+                  </button>
+                </div>
+
+                <div className="w-full">
+                  {view === 'traffic' ? (
+                    <ResponsiveContainer width="100%" height={500}>
+                      <LineChart data={combinedData}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#e5e5e5" />
+                        <XAxis 
+                          dataKey="interval" 
+                          label={{ value: 'Time Interval', position: 'insideBottom', offset: -5, style: { fontSize: 14 } }}
+                          stroke="#666"
+                        />
+                        <YAxis 
+                          label={{ value: 'Packets', angle: -90, position: 'insideLeft', style: { fontSize: 14 } }}
+                          stroke="#666"
+                        />
+                        <Tooltip 
+                          contentStyle={{ 
+                            backgroundColor: 'white', 
+                            border: '1px solid #e5e5e5', 
+                            borderRadius: '8px',
+                            fontSize: 13
+                          }}
+                        />
+                        <Legend wrapperStyle={{ fontSize: 14 }} />
+                        <Line 
+                          type="monotone" 
+                          dataKey="highMotion" 
+                          stroke="#a855f7" 
+                          strokeWidth={3}
+                          name="High-Motion Games"
+                          dot={false}
+                        />
+                        <Line 
+                          type="monotone" 
+                          dataKey="stationary" 
+                          stroke="#3b82f6" 
+                          strokeWidth={3}
+                          name="Stationary Games"
+                          dot={false}
+                        />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  ) : (
+                    <ResponsiveContainer width="100%" height={500}>
+                      <BarChart data={comparisonData}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#e5e5e5" />
+                        <XAxis 
+                          dataKey="metric" 
+                          stroke="#666"
+                          style={{ fontSize: 13 }}
+                        />
+                        <YAxis 
+                          stroke="#666"
+                          style={{ fontSize: 13 }}
+                        />
+                        <Tooltip 
+                          contentStyle={{ 
+                            backgroundColor: 'white', 
+                            border: '1px solid #e5e5e5', 
+                            borderRadius: '8px',
+                            fontSize: 13
+                          }}
+                        />
+                        <Legend wrapperStyle={{ fontSize: 14 }} />
+                        <Bar 
+                          dataKey="highMotion" 
+                          fill="#a855f7" 
+                          name="High-Motion Games"
+                          radius={[8, 8, 0, 0]}
+                        />
+                        <Bar 
+                          dataKey="stationary" 
+                          fill="#3b82f6" 
+                          name="Stationary Games"
+                          radius={[8, 8, 0, 0]}
+                        />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  )}
+                </div>
+              </div>
+            </div>
+          );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<VRNetworkViz />);
+    </script>
+</body>
+</html>
