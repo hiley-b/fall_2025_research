@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VR Network Analysis</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/recharts@2.5.0/dist/Recharts.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    
+    <script type="text/babel">
+        const { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } = window.Recharts;
+        const { useState } = React;
+
+        const categoryAData = [
+          { interval: 0, packets: 19 }, { interval: 1, packets: 16 }, { interval: 2, packets: 20 },
+          { interval: 3, packets: 20 }, { interval: 4, packets: 19 }, { interval: 5, packets: 11 },
+          { interval: 6, packets: 25 }, { interval: 7, packets: 46 }, { interval: 8, packets: 14 },
+          { interval: 9, packets: 27 }, { interval: 10, packets: 15 }, { interval: 11, packets: 21 },
+          { interval: 12, packets: 15 }, { interval: 13, packets: 14 }, { interval: 14, packets: 13 },
+          { interval: 15, packets: 16 }, { interval: 16, packets: 12 }, { interval: 17, packets: 11 },
+          { interval: 18, packets: 15 }, { interval: 19, packets: 26 }, { interval: 20, packets: 17 },
+          { interval: 21, packets: 21 }, { interval: 22, packets: 67 }, { interval: 23, packets: 12 },
+          { interval: 24, packets: 16 }, { interval: 25, packets: 20 }, { interval: 26, packets: 26 },
+          { interval: 27, packets: 10 }, { interval: 28, packets: 11 }, { interval: 29, packets: 32 },
+          { interval: 30, packets: 22 }, { interval: 31, packets: 65 }, { interval: 32, packets: 167 },
+          { interval: 33, packets: 166 }, { interval: 34, packets: 150 }, { interval: 35, packets: 155 },
+          { interval: 36, packets: 200 }, { interval: 37, packets: 168 }, { interval: 38, packets: 153 },
+          { interval: 39, packets: 165 }, { interval: 40, packets: 187 }, { interval: 41, packets: 156 },
+          { interval: 42, packets: 167 }, { interval: 43, packets: 198 }, { interval: 44, packets: 156 },
+          { interval: 45, packets: 147 }, { interval: 46, packets: 167 }, { interval: 47, packets: 178 },
+          { interval: 48, packets: 156 }, { interval: 49, packets: 168 }, { interval: 50, packets: 155 },
+          { interval: 51, packets: 370 }, { interval: 52, packets: 166 }, { interval: 53, packets: 179 },
+          { interval: 54, packets: 155 }, { interval: 55, packets: 238 }, { interval: 56, packets: 192 },
+          { interval: 57, packets: 182 }, { interval: 58, packets: 173 }, { interval: 59, packets: 181 },
+          { interval: 60, packets: 148 }, { interval: 61, packets: 127 }, { interval: 62, packets: 13 },
+          { interval: 63, packets: 40 }, { interval: 64, packets: 18 }, { interval: 65, packets: 55 },
+          { interval: 66, packets: 52 }, { interval: 67, packets: 37 }, { interval: 68, packets: 26 },
+          { interval: 69, packets: 34 }, { interval: 70, packets: 47 }, { interval: 71, packets: 26 },
+          { interval: 72, packets: 22 }, { interval: 73, packets: 32 }, { interval: 74, packets: 19 },
+          { interval: 75, packets: 20 }, { interval: 76, packets: 21 }, { interval: 77, packets: 28 },
+          { interval: 78, packets: 22 }, { interval: 79, packets: 29 }, { interval: 80, packets: 23 },
+          { interval: 81, packets: 26 }, { interval: 82, packets: 32 }, { interval: 83, packets: 34 },
+          { interval: 84, packets: 23 }, { interval: 85, packets: 20 }, { interval: 86, packets: 46 },
+          { interval: 87, packets: 72 }, { interval: 88, packets: 11 }, { interval: 89, packets: 35 },
+          { interval: 90, packets: 22 }, { interval: 91, packets: 14 }, { interval: 92, packets: 30 },
+          { interval: 93, packets: 16 }, { interval: 94, packets: 14 }, { interval: 95, packets: 11 },
+          { interval: 96, packets: 24 }, { interval: 97, packets: 34 }, { interval: 98, packets: 21 },
+          { interval: 99, packets: 24 }, { interval: 100, packets: 31 }, { interval: 101, packets: 12 },
+          { interval: 102, packets: 39 }, { interval: 103, packets: 16 }, { interval: 104, packets: 9 }
+        ];
+
+        const categoryBData = [
+          { interval: 0, packets: 57 }, { interval: 1, packets: 48 }, { interval: 2, packets: 54 },
+          { interval: 3, packets: 88 }, { interval: 4, packets: 60 }, { interval: 5, packets: 47 },
+          { interval: 6, packets: 76 }, { interval: 7, packets: 56 }, { interval: 8, packets: 41 },
+          { interval: 9, packets: 45 }, { interval: 10, packets: 46 }, { interval: 11, packets: 42 },
+          { interval: 12, packets: 46 }, { interval: 13, packets: 49 }, { interval: 14, packets: 59 },
+          { interval: 15, packets: 42 }, { interval: 16, packets: 52 }, { interval: 17, packets: 52 },
+          { interval: 18, packets: 54 }, { interval: 19, packets: 45 }, { interval: 20, packets: 92 },
+          { interval: 21, packets: 44 }, { interval: 22, packets: 50 }, { interval: 23, packets: 52 },
+          { interval: 24, packets: 58 }, { interval: 25, packets: 40 }, { interval: 26, packets: 16 },
+          { interval: 27, packets: 18 }, { interval: 28, packets: 26 }, { interval: 29, packets: 14 },
+          { interval: 30, packets: 193 }, { interval: 31, packets: 67 }, { interval: 32, packets: 12 },
+          { interval: 33, packets: 15 }, { interval: 34, packets: 52 }, { interval: 35, packets: 1 }
+        ];
+
+        const VRNetworkViz = () => {
+          const [view, setView] = useState('traffic');
+
+          const calcStats = (data) => {
+            const packets = data.map(d => d.packets);
+            const avgPackets = packets.reduce((a, b) => a + b, 0) / packets.length;
+            const maxPackets = Math.max(...packets);
+            return { avgPackets: avgPackets.toFixed(1), maxPackets };
+          };
+
+          const statsA = calcStats(categoryAData);
+          const statsB = calcStats(categoryBData);
+
+          const combinedData = categoryAData.map((item, idx) => ({
+            interval: item.interval,
+            highMotion: item.packets,
+            stationary: categoryBData[idx]?.packets || null
+          }));
+
+          const comparisonData = [
+            { metric: 'Avg Packets', highMotion: parseFloat(statsA.avgPackets), stationary: parseFloat(statsB.avgPackets) },
+            { metric: 'Peak Traffic', highMotion: statsA.maxPackets, stationary: statsB.maxPackets }
+          ];
+
+          return (
+            <div style={{ width: '100vw', height: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', backgroundColor: 'white', padding: '2rem' }}>
+              <div style={{ width: '100%', maxWidth: '80rem' }}>
+                <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem', justifyContent: 'center' }}>
+                  <button
+                    onClick={() => setView('traffic')}
+                    style={{
+                      padding: '0.5rem 1.25rem',
+                      borderRadius: '0.5rem',
+                      fontSize: '0.875rem',
+                      fontWeight: '500',
+                      border: 'none',
+                      cursor: 'pointer',
+                      backgroundColor: view === 'traffic' ? '#f472b6' : '#f3f4f6',
+                      color: view === 'traffic' ? 'white' : '#4b5563',
+                      boxShadow: view === 'traffic' ? '0 10px 15px -3px rgba(0, 0, 0, 0.1)' : 'none'
+                    }}
+                  >
+                    Traffic Patterns
+                  </button>
+                  <button
+                    onClick={() => setView('comparison')}
+                    style={{
+                      padding: '0.5rem 1.25rem',
+                      borderRadius: '0.5rem',
+                      fontSize: '0.875rem',
+                      fontWeight: '500',
+                      border: 'none',
+                      cursor: 'pointer',
+                      backgroundColor: view === 'comparison' ? '#f472b6' : '#f3f4f6',
+                      color: view === 'comparison' ? 'white' : '#4b5563',
+                      boxShadow: view === 'comparison' ? '0 10px 15px -3px rgba(0, 0, 0, 0.1)' : 'none'
+                    }}
+                  >
+                    Metrics Comparison
+                  </button>
+                </div>
+
+                <div style={{ width: '100%' }}>
+                  {view === 'traffic' ? (
+                    <ResponsiveContainer width="100%" height={500}>
+                      <LineChart data={combinedData}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#e5e5e5" />
+                        <XAxis 
+                          dataKey="interval" 
+                          label={{ value: 'Time Interval', position: 'insideBottom', offset: -5, style: { fontSize: 14 } }}
+                          stroke="#666"
+                        />
+                        <YAxis 
+                          label={{ value: 'Packets', angle: -90, position: 'insideLeft', style: { fontSize: 14 } }}
+                          stroke="#666"
+                        />
+                        <Tooltip />
+                        <Legend />
+                        <Line 
+                          type="monotone" 
+                          dataKey="highMotion" 
+                          stroke="#a855f7" 
+                          strokeWidth={3}
+                          name="High-Motion Games"
+                          dot={false}
+                        />
+                        <Line 
+                          type="monotone" 
+                          dataKey="stationary" 
+                          stroke="#3b82f6" 
+                          strokeWidth={3}
+                          name="Stationary Games"
+                          dot={false}
+                        />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  ) : (
+                    <ResponsiveContainer width="100%" height={500}>
+                      <BarChart data={comparisonData}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#e5e5e5" />
+                        <XAxis dataKey="metric" stroke="#666" />
+                        <YAxis stroke="#666" />
+                        <Tooltip />
+                        <Legend />
+                        <Bar dataKey="highMotion" fill="#a855f7" name="High-Motion Games" />
+                        <Bar dataKey="stationary" fill="#3b82f6" name="Stationary Games" />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  )}
+                </div>
+              </div>
+            </div>
+          );
+        };
+
+        // Wait for all libraries to load
+        window.addEventListener('load', () => {
+          if (window.React && window.ReactDOM && window.Recharts) {
+            const root = ReactDOM.createRoot(document.getElementById('root'));
+            root.render(<VRNetworkViz />);
+          } else {
+            document.getElementById('root').innerHTML = '<div style="padding: 2rem; text-align: center;">Loading libraries...</div>';
+          }
+        });
+    </script>
+</body>
+</html>
